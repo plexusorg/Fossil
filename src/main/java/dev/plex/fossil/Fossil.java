@@ -21,6 +21,7 @@ public final class Fossil extends JavaPlugin {
         plugin = this;
         server = plugin.getServer();
         getCommand("fossil").setExecutor(new FossilCommand());
+        getCommand("fossil").setTabCompleter(new FossilCommand());
     }
 
     @Override

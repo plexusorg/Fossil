@@ -1,4 +1,8 @@
 name: Fossil
 version: '${version}'
 main: dev.plex.fossil.Fossil
-api-version: 1.20
+api-version: 1.19
+commands:
+  fossil:
+    description: The main command for Fossil
+    usage: /<command> [update]

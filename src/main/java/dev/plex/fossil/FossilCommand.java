@@ -1,32 +1,38 @@
 package dev.plex.fossil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class FossilCommand implements CommandExecutor, IFossil {
-    private final List<String> FILES = plugin.getConfig().getStringList("plugins");
+public class FossilCommand implements CommandExecutor, TabCompleter, IFossil {
+    private List<String> FILES = new ArrayList<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (args.length == 0) {
             sender.sendMessage(Component.text("This server is running Fossil to keep plugins in sync."));
-            sender.sendMessage(Component.text("Source code available at https://github.com/plexusorg/Fossil"));
+            sender.sendMessage(Component.text("Source code available at: https://github.com/plexusorg/Fossil"));
             return true;
         }
 
-        if (args.length > 1) {
+        if (args[0].equalsIgnoreCase("update")) {
             if (!sender.hasPermission("fossil.update")) {
                 sender.sendMessage(Component.text("You do not have permission to use this command!").color(NamedTextColor.RED));
                 return true;
             }
             sender.sendMessage(Component.text("Updating server plugins").color(NamedTextColor.GRAY));
+
+            for (String file : plugin.getConfig().getStringList("plugins")) {
+                FILES.add(plugin.getPlugin(file));
+            }
 
             new BukkitRunnable() {
                 @Override
@@ -51,7 +57,17 @@ public class FossilCommand implements CommandExecutor, IFossil {
                     }
                 }
             }.runTaskAsynchronously(plugin);
+        } else {
+            return false;
         }
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 1 && sender.hasPermission("fossil.update")) {
+            return Collections.singletonList("update");
+        }
+        return Collections.emptyList();
     }
 }
