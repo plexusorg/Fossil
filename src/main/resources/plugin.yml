@@ -1,0 +1,4 @@
+name: Fossil
+version: '${version}'
+main: dev.plex.fossil.Fossil
+api-version: 1.20

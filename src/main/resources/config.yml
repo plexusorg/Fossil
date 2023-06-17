@@ -1,0 +1,16 @@
+plugins:
+  - CoreProtect
+  - DiscordSRV
+  - DrMap
+  - LibsDisguises
+  - EssentialsX
+  - EssentialsXSpawn
+  - Plex-FAWE
+  - ItemizerX
+  - LibsDisguises
+  - LuckPerms
+  - Plan
+  - ProtocolLib
+  - spark
+  - Vault
+  - WorldGuard
